@@ -56,7 +56,7 @@ interface IProps {
   ss: number;
 }
 
-const Start: FC<IProps> = ({ hh, mm, ss}) => {
+const Start: FC<IProps> = ({ hh, mm, ss }) => {
   const [time, setTime] = useState(hh * 60 * 60 + mm * 60 + ss);
 
   const h = time / 3600 >= 1 ? Math.floor(time / 3600) : 0;
@@ -65,15 +65,15 @@ const Start: FC<IProps> = ({ hh, mm, ss}) => {
   const s = time - m * 60 - h * 3600;
 
   useEffect(() => {
-    if(time > 0) {
-        setTimeout(() => setTime((prev) => prev - 1), 1000);
+    if (time > 0) {
+      setTimeout(() => setTime((prev) => prev - 1), 1000);
     }
   }, [time]);
 
   return (
-      <StartBlock>
-        <span>{h}</span>:<span>{m}</span>:<span>{s}</span>
-      </StartBlock>
+    <StartBlock>
+      <span>{h}</span>:<span>{m}</span>:<span>{s}</span>
+    </StartBlock>
   );
 };
 
@@ -88,22 +88,51 @@ const Timer: FC = () => {
       {start ? (
         <Start setStart={setStart} hh={+hh} mm={+mm} ss={+ss} />
       ) : (
-          <TimerBlock>
-            <label>
-              hh
-              <input value={hh} onChange={(e) => setHh(e.target.value)} />
-            </label>
-            <label>
-              mm
-              <input value={mm} onChange={(e) => setMm(e.target.value)} />
-            </label>
-            <label>
-              ss
-              <input value={ss} onChange={(e) => setSs(e.target.value)} />
-            </label>
-          </TimerBlock>
+        <TimerBlock>
+          <label>
+            hh
+            <input
+              min="0"
+              max="99"
+              value={hh}
+              onChange={(e) => {
+                const { value, min, max } = e.target;
+                const result = Math.max(Number(min), Math.min(Number(max), Number(value)))
+                !Number.isNaN(result) && setHh(`${result}`);
+              }}
+            />
+          </label>
+          <label>
+            mm
+            <input
+              min="0"
+              max="59"
+              value={mm}
+              onChange={(e) => {
+                const { value, min, max } = e.target;
+                const result = Math.max(Number(min), Math.min(Number(max), Number(value)))
+                !Number.isNaN(result) && setMm(`${result}`);
+              }}
+            />
+          </label>
+          <label>
+            ss
+            <input
+              min="0"
+              max="59"
+              value={ss}
+              onChange={(e) => {
+                const { value, min, max } = e.target;
+                const result = Math.max(Number(min), Math.min(Number(max), Number(value)))
+                !Number.isNaN(result) && setSs(`${result}`);
+              }}
+            />
+          </label>
+        </TimerBlock>
       )}
-      <StartButton onClick={() => setStart(!start)}>{start ? 'END' : 'START'}</StartButton>
+      <StartButton onClick={() => setStart(!start)}>
+        {start ? "END" : "START"}
+      </StartButton>
     </div>
   );
 };
