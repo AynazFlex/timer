@@ -56,7 +56,7 @@ interface IProps {
   ss: number;
 }
 
-const Start: FC<IProps> = ({ hh, mm, ss }) => {
+const Start: FC<IProps> = ({ hh, mm, ss, setStart }) => {
   const [time, setTime] = useState(hh * 60 * 60 + mm * 60 + ss);
 
   const h = time / 3600 >= 1 ? Math.floor(time / 3600) : 0;
@@ -67,12 +67,13 @@ const Start: FC<IProps> = ({ hh, mm, ss }) => {
   useEffect(() => {
     if (time > 0) {
       setTimeout(() => setTime((prev) => prev - 1), 1000);
-    }
-  }, [time]);
+    } else setStart(false);
+  }, [time, setStart]);
 
   return (
     <StartBlock>
-      <span>{h}</span>:<span>{m}</span>:<span>{s}</span>
+      <span>{h < 10 ? `0${h}` : h}</span>:<span>{m < 10 ? `0${m}` : m}</span>:
+      <span>{s < 10 ? `0${s}` : s}</span>
     </StartBlock>
   );
 };
@@ -97,7 +98,10 @@ const Timer: FC = () => {
               value={hh}
               onChange={(e) => {
                 const { value, min, max } = e.target;
-                const result = Math.max(Number(min), Math.min(Number(max), Number(value)))
+                const result = Math.max(
+                  Number(min),
+                  Math.min(Number(max), Number(value))
+                );
                 !Number.isNaN(result) && setHh(`${result}`);
               }}
             />
@@ -110,7 +114,10 @@ const Timer: FC = () => {
               value={mm}
               onChange={(e) => {
                 const { value, min, max } = e.target;
-                const result = Math.max(Number(min), Math.min(Number(max), Number(value)))
+                const result = Math.max(
+                  Number(min),
+                  Math.min(Number(max), Number(value))
+                );
                 !Number.isNaN(result) && setMm(`${result}`);
               }}
             />
@@ -123,7 +130,10 @@ const Timer: FC = () => {
               value={ss}
               onChange={(e) => {
                 const { value, min, max } = e.target;
-                const result = Math.max(Number(min), Math.min(Number(max), Number(value)))
+                const result = Math.max(
+                  Number(min),
+                  Math.min(Number(max), Number(value))
+                );
                 !Number.isNaN(result) && setSs(`${result}`);
               }}
             />
