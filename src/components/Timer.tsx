@@ -59,16 +59,16 @@ interface IProps {
 const Start: FC<IProps> = ({ hh, mm, ss, setStart }) => {
   const [time, setTime] = useState(hh * 60 * 60 + mm * 60 + ss);
 
+  useEffect(() => {
+    if (time > 0) {
+      setTimeout(() => setTime(time - 1), 1000);
+    } else setStart(false);
+  }, [time]);
+
   const h = time / 3600 >= 1 ? Math.floor(time / 3600) : 0;
   const m =
     (time - h * 3600) / 60 >= 1 ? Math.floor((time - h * 3600) / 60) : 0;
   const s = time - m * 60 - h * 3600;
-
-  useEffect(() => {
-    if (time > 0) {
-      setTimeout(() => setTime((prev) => prev - 1), 1000);
-    } else setStart(false);
-  }, [time, setStart]);
 
   return (
     <StartBlock>
